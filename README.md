@@ -38,7 +38,3 @@ The system allows students to join a queue online, view their current status, re
 
 ### Frontend
 - **REST API integration with the backend**
-
----
-
-## Architecture (general diagram)
