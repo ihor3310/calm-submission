@@ -1,3 +1,4 @@
+# main/mysite/settings.py
 """
 Django settings for main project.
 
@@ -9,11 +10,15 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+import os
 from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR тепер вказує на папку main/mysite
+BASE_DIR = Path(__file__).resolve().parent
+# PROJECT_ROOT вказує на calm-submission
+PROJECT_ROOT = BASE_DIR.parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -55,6 +60,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = [
@@ -66,12 +72,12 @@ CORS_ALLOW_HEADERS = [
     "x-csrftoken",
 ]
 
-ROOT_URLCONF = 'main.urls'
+ROOT_URLCONF = 'main.mysite.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR.parent, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -85,6 +91,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'main.mysite.wsgi.application'
 
+AUTH_USER_MODEL = 'main.CustomUser'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -92,7 +99,8 @@ WSGI_APPLICATION = 'main.mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        # База даних буде у корені проєкту (calm-submission)
+        'NAME': PROJECT_ROOT / 'db.sqlite3',
     }
 }
 
@@ -131,11 +139,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
-
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    os.path.join(BASE_DIR, 'main/static'),
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -217,7 +226,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': 'django_auth.log',
+            'filename': PROJECT_ROOT / 'django_auth.log',
             'formatter': 'verbose',
         },
         'console': {
