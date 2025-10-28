@@ -1,9 +1,13 @@
 from django.http import HttpResponse
-from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import CustomUserSerializer
 from rest_framework import status
+from django.shortcuts import render
+
+def register_user(request):
+    return render(request, 'register.html')
+
 
 def home(request):
     return render(request, 'index.html')
@@ -26,7 +30,6 @@ class QueueEntryDetailView(APIView):
 
 def get_csrf_token(request):
     return HttpResponse("CSRF endpoint")
-
 
 class Register(APIView):
     permission_classes = []
